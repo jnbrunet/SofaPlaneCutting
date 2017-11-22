@@ -1,0 +1,37 @@
+<Node name="root" gravity="0 -9 1" dt="1">
+    <APIVersion level='17.06'/>
+    <VisualStyle displayFlags="showBehavior showVisual showWireframe"/>
+
+    <RequiredPlugin name='SofaMiscCollision'/>
+
+    <FreeMotionAnimationLoop/>
+    <GenericConstraintSolver tolerance="1e-8" maxIterations="500" printLog="0"/>
+
+    <Node name="cube">
+        <EulerImplicit name="cg_odesolver" printLog="false"/>
+        <CGLinearSolver iterations="25" name="linear solver" tolerance="1.0e-9" threshold="1.0e-9"/>
+
+        <RegularGridTopology name="grid" n="4 4 4" min="0 0 0" max="10 10 10" p0="0 0 0"/>
+        <MechanicalObject template="Vec3d" name="default24" bbox="0 0 0 10 10 10" src="@grid"/>
+        <FixedConstraint indices="12 15 60 63"/>
+
+        <!--<Node name="tets">-->
+        <TetrahedronSetTopologyContainer name="Tetra_topo"/>
+        <TetrahedronSetTopologyModifier name="Modifier"/>
+        <TetrahedronSetTopologyCuttingAlgorithms name="TopoAlgo" template="Vec3d"/>
+        <TetrahedronSetGeometryAlgorithms name="GeomAlgo" template="Vec3d"/>
+        <Hexa2TetraTopologicalMapping name="default28" input="@grid" output="@Tetra_topo" swapping="1"/>
+        <!--</Node>-->
+
+        <DiagonalMass massDensity="0.5"/>
+
+        <TetrahedralCorotationalFEMForceField name="FEM" youngModulus="3600" poissonRatio="0.3" method="large"
+                                              computeGlobalMatrix="true"/>
+        <LinearSolverConstraintCorrection/>
+
+        <PlaneCutting plane_corner_1="10 5.5 0" plane_corner_2="0 5.5 0" plane_corner_3="0 5.5 10"/>
+
+    </Node>
+
+
+</Node>
