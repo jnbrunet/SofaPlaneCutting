@@ -19,58 +19,23 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include "config.h"
+#ifndef PLANECUTTING_CONFIG_H
+#define PLANECUTTING_CONFIG_H
 
-namespace sofa
-{
+#include <sofa/helper/system/config.h>
 
-namespace component
-{
+#ifndef WIN32
+    #define SOFA_EXPORT_DYNAMIC_LIBRARY
+    #define SOFA_IMPORT_DYNAMIC_LIBRARY
+    #define PLANECUTTING_API
+#else
+    #ifdef SOFA_BUILD_PLANECUTTING
+        #define SOFA_EXPORT_DYNAMIC_LIBRARY __declspec( dllexport )
+        #define PLANECUTTING_API SOFA_EXPORT_DYNAMIC_LIBRARY
+    #else
+        #define SOFA_IMPORT_DYNAMIC_LIBRARY __declspec( dllimport )
+        #define PLANECUTTING_API SOFA_IMPORT_DYNAMIC_LIBRARY
+    #endif
+#endif
 
-//Here are just several convenient functions to help user to know what contains the plugin
-
-extern "C" {
-PLANECUTTING_API void initExternalModule();
-PLANECUTTING_API const char* getModuleName();
-PLANECUTTING_API const char* getModuleVersion();
-PLANECUTTING_API const char* getModuleLicense();
-PLANECUTTING_API const char* getModuleDescription();
-PLANECUTTING_API const char* getModuleComponentList();
-}
-
-void initExternalModule()
-{
-    static bool first = true;
-    if (first) {
-        first = false;
-    }
-}
-
-const char* getModuleName()
-{
-    return "Plugin Plane Cutting";
-}
-
-const char* getModuleVersion()
-{
-    return "alpa 1.0";
-}
-
-const char* getModuleLicense()
-{
-    return "LGPL";
-}
-
-const char* getModuleDescription()
-{
-    return "Cutting with SOFA Framework's connectivity";
-}
-
-const char* getModuleComponentList()
-{
-    return "controllers ";
-}
-
-}
-
-}
+#endif

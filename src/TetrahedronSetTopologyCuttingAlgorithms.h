@@ -1,6 +1,8 @@
 #ifndef CUTTING_TETRAHEDRONSETTOPOLOGYCUTTINGALGORITHMS_H
 #define CUTTING_TETRAHEDRONSETTOPOLOGYCUTTINGALGORITHMS_H
 
+#include "config.h"
+
 #include <SofaBaseTopology/TetrahedronSetTopologyAlgorithms.h>
 #include <SofaBaseTopology/TetrahedronSetTopologyContainer.h>
 
@@ -74,6 +76,14 @@ protected:
 
     sofa::core::behavior::MechanicalState<DataTypes> *m_state;
 };
+
+#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_PARTICLESREPULSIONFORCEFIELD_CPP)
+
+#ifndef SOFA_FLOAT
+extern template class PLANECUTTING_API TetrahedronSetTopologyCuttingAlgorithms<sofa::defaulttype::Vec3dTypes>;
+#endif
+
+#endif // defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_PARTICLESREPULSIONFORCEFIELD_CPP)
 
 } // namespace topology
 
