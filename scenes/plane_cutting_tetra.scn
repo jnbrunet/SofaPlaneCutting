@@ -17,7 +17,7 @@
 
         <!--<Node name="tets">-->
         <TetrahedronSetTopologyContainer name="Tetra_topo"/>
-        <TetrahedronSetTopologyModifier name="Modifier"/>
+        <TetrahedronSetTopologyModifier name="Modifier" removeIsolated="false"/>
         <TetrahedronSetTopologyCuttingAlgorithms name="TopoAlgo" template="Vec3d"/>
         <TetrahedronSetGeometryAlgorithms name="GeomAlgo" template="Vec3d"/>
         <Hexa2TetraTopologicalMapping name="default28" input="@grid" output="@Tetra_topo" swapping="1"/>
@@ -26,7 +26,7 @@
         <DiagonalMass massDensity="0.5"/>
 
         <TetrahedralCorotationalFEMForceField name="FEM" youngModulus="3600" poissonRatio="0.3" method="large"
-                                              computeGlobalMatrix="true"/>
+                                              computeGlobalMatrix="false"/>
         <LinearSolverConstraintCorrection/>
 
         <PlaneCutting plane_corner_1="10 5.5 0" plane_corner_2="0 5.5 0" plane_corner_3="0 5.5 10"/>

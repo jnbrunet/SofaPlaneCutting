@@ -29,7 +29,6 @@ unsigned int TetrahedronSetTopologyCuttingAlgorithms<DataTypes>::subDivideTetrah
     unsigned int tetra_id,
     const Coord p0, const Coord p1,
     const Coord p2,
-    sofa::helper::vector<Tetra> &tetrahedrons,
     std::vector<Coord> &intersections_points) noexcept
 {
 /*
@@ -42,7 +41,6 @@ unsigned int TetrahedronSetTopologyCuttingAlgorithms<DataTypes>::subDivideTetrah
 
     // Locate the last corner of the parallelogram
     const Coord
-        p3 = p2 + (p0 - p1),
         e1 = p0 - p1, // Unit vector base e1 of parallelogram
         e2 = p2 - p1, // Unit vector base e2 of parallelogram
         n = (e1.cross(e2)).normalized(); // normal = e1 X e2
@@ -87,6 +85,48 @@ unsigned int TetrahedronSetTopologyCuttingAlgorithms<DataTypes>::subDivideTetrah
     }
 
     return 0;
+}
+
+template<class DataTypes>
+unsigned int TetrahedronSetTopologyCuttingAlgorithms<DataTypes>::subDivideTetrahedronsWithParallelogram(
+    const Coord & p0, const Coord & p1,
+    const Coord & p2,
+    sofa::helper::vector<Coord> &intersections) noexcept
+{
+    if (!this->m_state || !this->m_container || !this->m_modifier)
+        return 0;
+
+    // Locate the last corner of the parallelogram
+    const Coord
+        e1 = p0 - p1, // Unit vector base e1 of parallelogram
+        e2 = p2 - p1, // Unit vector base e2 of parallelogram
+        n = (e1.cross(e2)).normalized(); // normal = e1 X e2
+
+    VecCoord intersectedPoints;
+    sofa::helper::vector<sofa::core::topology::Topology::EdgeID> intersectedEdges;
+    const auto &positions = m_state->readPositions();
+
+    for (unsigned int edge_id = 0; edge_id < this->m_container->getNumberOfEdges(); ++edge_id) {
+
+        const Coord
+            &edge_p0 = positions[this->m_container->getEdge(edge_id)[0]], // Tetrahedron's edge first vertex
+            &edge_p1 = positions[this->m_container->getEdge(edge_id)[1]], // Tetrahedron's edge second vertex
+            edge = edge_p1 - edge_p0; // Tetrahedron's edge
+
+        Coord intersection;
+        if (RayIntersectsParallelogram(p0, p1, p2, edge_p0, edge_p1, intersection)) {
+            intersections.push_back(intersection);
+            intersectedEdges.push_back(edge_id);
+        }
+    }
+
+    if (intersections.size() > 0 && intersections.size() == intersectedEdges.size()) {
+        this->subDivideTetrahedronsWithPlane(intersections, intersectedEdges, p1, n);
+        return 1;
+    } else {
+        msg_error() << "Mismatch";
+        return 0;
+    }
 }
 
 template<class DataTypes>

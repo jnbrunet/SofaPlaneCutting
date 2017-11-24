@@ -49,8 +49,13 @@ public:
                                                        const Coord p0,
                                                        const Coord p1,
                                                        const Coord p2,
-                                                       sofa::helper::vector<Tetra> &tetrahedrons,
                                                        std::vector<Coord> &intersections_points) noexcept;
+
+    unsigned int subDivideTetrahedronsWithParallelogram(
+                                                       const Coord & p0,
+                                                       const Coord & p1,
+                                                       const Coord & p2,
+                                                       sofa::helper::vector<Coord> &intersections_points) noexcept;
 
     bool RayIntersectsParallelogram(
         const Coord p0, const Coord p1, const Coord p2,

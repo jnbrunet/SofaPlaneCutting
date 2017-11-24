@@ -121,13 +121,11 @@ void PlaneCutting::handleEvent(sofa::core::objectmodel::Event *event)
                 break;
             case 67: // c
                 intersections_points.clear();
-                for (unsigned int id_tetra = 0; id_tetra < m_topology_container->getNumberOfTetrahedra(); ++id_tetra) {
-                    sofa::helper::vector<sofa::core::topology::BaseMeshTopology::Tetra> tetrahedrons;
-
-                    algo->subDivideTetrahedronWithParallelogram(id_tetra, m_plane_corner_1.getValue(),
-                                                                m_plane_corner_2.getValue(),
-                                                                m_plane_corner_3.getValue(), tetrahedrons, intersections_points);
-                }
+                algo->subDivideTetrahedronsWithParallelogram(
+                    m_plane_corner_1.getValue(),
+                    m_plane_corner_2.getValue(),
+                    m_plane_corner_3.getValue(),
+                    intersections_points);
                 break;
             case 74: // j
                 m_plane_corner_1.setValue(m_plane_corner_1.getValue() + sofa::defaulttype::Vector3(0, 0, -0.1));

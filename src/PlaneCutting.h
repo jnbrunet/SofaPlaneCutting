@@ -44,7 +44,7 @@ private:
     sofa::defaulttype::Vec3d m_plane_normal;
     sofa::defaulttype::Vec3d m_plane_corner_4;
 
-    std::vector<sofa::defaulttype::Vector3> intersections_points;
+    sofa::helper::vector<sofa::defaulttype::Vector3> intersections_points;
 };
 
 
